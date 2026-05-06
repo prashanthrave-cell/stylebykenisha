@@ -1,0 +1,136 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@300;400;500;600&display=swap');
+
+:root {
+  --pink: #FFB5C8;
+  --rose: #FF6B9D;
+  --sky: #B8E8FF;
+  --blue: #5BC4F5;
+  --yellow: #FFE97A;
+  --gold: #FFB800;
+  --mint: #B8F0D8;
+  --green: #3ECFA0;
+  --lavender: #D8C8FF;
+  --purple: #9B72F5;
+  --cream: #FFF9F5;
+  --charcoal: #2D2D2D;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background-color: var(--cream);
+  color: var(--charcoal);
+  overflow-x: hidden;
+}
+
+html { scroll-behavior: smooth; }
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+}
+
+@keyframes pop {
+  0% { transform: scale(0.8); opacity: 0; }
+  80% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes rainbow {
+  0% { color: #FF6B9D; }
+  25% { color: #5BC4F5; }
+  50% { color: #FFB800; }
+  75% { color: #9B72F5; }
+  100% { color: #3ECFA0; }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.float { animation: float 3s ease-in-out infinite; }
+.float-slow { animation: float 4s ease-in-out infinite; }
+.float-fast { animation: float 2s ease-in-out infinite; }
+.wiggle { animation: wiggle 2s ease-in-out infinite; }
+.pop { animation: pop 0.4s ease forwards; }
+.spin-slow { animation: spin-slow 8s linear infinite; }
+
+.shimmer-text {
+  background: linear-gradient(90deg, #FF6B9D, #9B72F5, #5BC4F5, #3ECFA0, #FFB800, #FF6B9D);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+
+.rainbow { animation: rainbow 3s ease-in-out infinite; }
+
+/* Cloud pattern background */
+.clouds-bg {
+  background-color: #FFF0F9;
+  background-image:
+    radial-gradient(ellipse 120px 80px at 10% 20%, rgba(255,181,200,0.3) 0%, transparent 100%),
+    radial-gradient(ellipse 100px 60px at 90% 10%, rgba(184,232,255,0.3) 0%, transparent 100%),
+    radial-gradient(ellipse 80px 50px at 50% 90%, rgba(255,233,122,0.3) 0%, transparent 100%);
+}
+
+/* Product card hover */
+.product-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.product-card:hover {
+  transform: translateY(-8px) rotate(0.5deg);
+  box-shadow: 0 20px 40px rgba(255,107,157,0.2);
+}
+
+/* Cute button */
+.btn-primary {
+  background: linear-gradient(135deg, #FF6B9D, #9B72F5);
+  color: white;
+  border-radius: 50px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+.btn-primary:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(255,107,157,0.4);
+}
+
+/* Tag badge */
+.offer-badge {
+  background: linear-gradient(135deg, #FF6B9D, #FF3D7F);
+  color: white;
+  border-radius: 50px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 12px;
+  padding: 2px 10px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #FFF0F9; }
+::-webkit-scrollbar-thumb { background: #FFB5C8; border-radius: 10px; }
+
+/* Stars */
+.star { color: #FFB800; }

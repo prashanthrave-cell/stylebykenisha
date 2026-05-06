@@ -1,0 +1,303 @@
+"use client";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import ProductCard from "./components/ProductCard";
+import { getProducts, Product } from "./lib/productService";
+
+const CATEGORIES = [
+  { icon: "👗", label: "Frocks", value: "Frocks" },
+  { icon: "👶", label: "Baby Wear", value: "Baby Wear" },
+  { icon: "🧸", label: "Toddler", value: "Toddler" },
+  { icon: "🌟", label: "Dresses", value: "Dresses" },
+  { icon: "🎀", label: "Sets", value: "Sets" },
+];
+
+const OFFERS = [
+  { emoji: "🎀", title: "Up to 40% Off", desc: "On Frocks & Dresses", color: "#FF6B9D", bg: "#FFF0F5" },
+  { emoji: "👶", title: "Baby Wear Sale", desc: "New arrivals every week", color: "#5BC4F5", bg: "#F0FAFF" },
+  { emoji: "🌟", title: "Buy 2 Get 10% Off", desc: "Mix & match styles", color: "#FFB800", bg: "#FFFBEC" },
+];
+
+export default function HomePage() {
+  const [featured, setFeatured] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    getProducts()
+      .then((all) => setFeatured(all.filter((p) => p.featured).slice(0, 8)))
+      .catch(() => setFeatured([]))
+      .finally(() => setLoading(false));
+  }, []);
+
+  return (
+    <>
+      <Navbar />
+      <main style={{ minHeight: "100vh" }}>
+
+        {/* ====== HERO BANNER ====== */}
+        <section style={{
+          background: "linear-gradient(135deg, #FFF0F9 0%, #F0F0FF 50%, #F0FAFF 100%)",
+          padding: "60px 24px 40px",
+          textAlign: "center",
+          position: "relative",
+          overflow: "hidden",
+        }}>
+          {/* Floating decorations */}
+          {["🌸", "⭐", "🎈", "🌈", "💫", "🎀", "🌟", "🦋"].map((em, i) => (
+            <span key={i} className={i % 2 === 0 ? "float" : "float-slow"} style={{
+              position: "absolute",
+              fontSize: [28, 20, 24, 18, 22, 20, 26, 18][i],
+              top: ["10%", "15%", "8%", "20%", "12%", "18%", "5%", "25%"][i],
+              left: [`${i * 12 + 2}%`],
+              opacity: 0.6,
+              userSelect: "none",
+            }}>{em}</span>
+          ))}
+
+          <div style={{ position: "relative", zIndex: 1, maxWidth: 700, margin: "0 auto" }}>
+            <div style={{
+              display: "inline-block",
+              background: "linear-gradient(135deg,#FFB5C8,#D8C8FF)",
+              borderRadius: 50, padding: "6px 20px", fontSize: 13, fontWeight: 800,
+              color: "#9B72F5", marginBottom: 20, letterSpacing: 1,
+            }}>
+              🌸 STYLE BY KENISHA · Kids Fashion Store
+            </div>
+
+            <h1 style={{
+              fontFamily: "'Fredoka One', cursive",
+              fontSize: "clamp(36px, 7vw, 72px)",
+              lineHeight: 1.1, marginBottom: 16,
+            }}>
+              <span className="shimmer-text">Cute Clothes</span>
+              <br />
+              <span style={{ color: "#2D2D2D" }}>for Little Ones 💕</span>
+            </h1>
+
+            <p style={{
+              color: "#888", fontSize: "clamp(15px,2vw,18px)", lineHeight: 1.7,
+              maxWidth: 480, margin: "0 auto 32px",
+            }}>
+              Adorable frocks, baby wear & toddler outfits. Fresh styles every week! 🌈
+            </p>
+
+            {/* Search bar */}
+            <div style={{ display: "flex", gap: 0, maxWidth: 480, margin: "0 auto 28px", background: "#fff", borderRadius: 50, boxShadow: "0 4px 20px rgba(255,107,157,0.2)", border: "2px solid #FFB5C8", overflow: "hidden" }}>
+              <input
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                placeholder="🔍 Search frocks, baby wear..."
+                style={{ flex: 1, border: "none", outline: "none", padding: "14px 20px", fontSize: 15, background: "transparent", fontFamily: "'Nunito',sans-serif" }}
+                onKeyDown={e => e.key === "Enter" && window.location.assign(`/products?q=${search}`)}
+              />
+              <Link href={`/products?q=${search}`} style={{
+                background: "linear-gradient(135deg,#FF6B9D,#9B72F5)",
+                color: "#fff", padding: "14px 24px",
+                fontWeight: 800, fontSize: 14, textDecoration: "none", display: "flex", alignItems: "center",
+              }}>Search</Link>
+            </div>
+
+            <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+              <Link href="/products" style={{
+                background: "linear-gradient(135deg,#FF6B9D,#9B72F5)",
+                color: "#fff", padding: "14px 32px", borderRadius: 50,
+                fontWeight: 800, fontSize: 16, textDecoration: "none",
+                boxShadow: "0 6px 20px rgba(255,107,157,0.4)",
+                transition: "transform 0.2s",
+              }}>
+                👗 Shop All Styles
+              </Link>
+              <a href="https://wa.me/916361360153?text=Hi%20Style%20by%20Kenisha!" target="_blank" rel="noopener noreferrer" style={{
+                background: "#25d366", color: "#fff", padding: "14px 28px", borderRadius: 50,
+                fontWeight: 800, fontSize: 16, textDecoration: "none",
+                boxShadow: "0 6px 20px rgba(37,211,102,0.35)",
+              }}>
+                💬 WhatsApp Us
+              </a>
+            </div>
+          </div>
+
+          {/* Stats */}
+          <div style={{ display: "flex", justifyContent: "center", gap: 32, flexWrap: "wrap", marginTop: 48 }}>
+            {[
+              { num: "500+", label: "Happy Kids", emoji: "😊" },
+              { num: "100+", label: "Cute Styles", emoji: "👗" },
+              { num: "4.9★", label: "Customer Love", emoji: "❤️" },
+              { num: "Free", label: "Delivery in BLR", emoji: "🚚" },
+            ].map(({ num, label, emoji }) => (
+              <div key={label} style={{ textAlign: "center" }}>
+                <div style={{ fontSize: 28 }}>{emoji}</div>
+                <div style={{ fontFamily: "'Fredoka One',cursive", fontSize: 28, color: "#FF6B9D" }}>{num}</div>
+                <div style={{ fontSize: 12, color: "#aaa", fontWeight: 600 }}>{label}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ====== CATEGORIES ====== */}
+        <section style={{ padding: "48px 24px", maxWidth: 1100, margin: "0 auto" }}>
+          <h2 style={{ fontFamily: "'Fredoka One',cursive", fontSize: 34, textAlign: "center", marginBottom: 8 }}>
+            Shop by <span style={{ color: "#FF6B9D" }}>Category</span> 🎀
+          </h2>
+          <p style={{ textAlign: "center", color: "#aaa", marginBottom: 32, fontSize: 15 }}>Find the perfect outfit for your little star ⭐</p>
+
+          <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
+            {CATEGORIES.map(({ icon, label, value }) => (
+              <Link key={value} href={`/products?category=${value}`} style={{ textDecoration: "none" }}>
+                <div style={{
+                  background: "#fff", border: "2px solid #FFE0EE",
+                  borderRadius: 20, padding: "20px 28px",
+                  textAlign: "center", cursor: "pointer",
+                  transition: "all 0.3s",
+                  minWidth: 120,
+                }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-6px)"; (e.currentTarget as HTMLElement).style.borderColor = "#FF6B9D"; (e.currentTarget as HTMLElement).style.boxShadow = "0 12px 24px rgba(255,107,157,0.2)"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = ""; (e.currentTarget as HTMLElement).style.borderColor = "#FFE0EE"; (e.currentTarget as HTMLElement).style.boxShadow = ""; }}
+                >
+                  <div style={{ fontSize: 36, marginBottom: 8 }}>{icon}</div>
+                  <div style={{ fontWeight: 800, fontSize: 14, color: "#2D2D2D" }}>{label}</div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* ====== OFFERS SECTION ====== */}
+        <section style={{ padding: "0 24px 48px", maxWidth: 1100, margin: "0 auto" }}>
+          <h2 style={{ fontFamily: "'Fredoka One',cursive", fontSize: 34, textAlign: "center", marginBottom: 8 }}>
+            🏷️ Special <span style={{ color: "#FFB800" }}>Offers</span>
+          </h2>
+          <p style={{ textAlign: "center", color: "#aaa", marginBottom: 32, fontSize: 15 }}>Grab these deals before they're gone! 🌟</p>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 20 }}>
+            {OFFERS.map(({ emoji, title, desc, color, bg }) => (
+              <div key={title} style={{
+                background: bg, border: `2px solid ${color}40`,
+                borderRadius: 24, padding: "28px 24px",
+                display: "flex", alignItems: "center", gap: 20,
+                transition: "transform 0.3s",
+              }}
+                onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.02)")}
+                onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
+              >
+                <div style={{ fontSize: 48 }} className="wiggle">{emoji}</div>
+                <div>
+                  <div style={{ fontFamily: "'Fredoka One',cursive", fontSize: 22, color }}>{title}</div>
+                  <div style={{ color: "#888", fontSize: 14, marginTop: 4 }}>{desc}</div>
+                  <Link href="/products" style={{ color, fontWeight: 800, fontSize: 14, textDecoration: "none", marginTop: 8, display: "inline-block" }}>
+                    Shop Now →
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ====== FEATURED PRODUCTS ====== */}
+        <section style={{ padding: "0 24px 60px", maxWidth: 1100, margin: "0 auto" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 32, flexWrap: "wrap", gap: 12 }}>
+            <div>
+              <h2 style={{ fontFamily: "'Fredoka One',cursive", fontSize: 34, marginBottom: 4 }}>
+                ⭐ Featured <span style={{ color: "#FF6B9D" }}>Products</span>
+              </h2>
+              <p style={{ color: "#aaa", fontSize: 15 }}>Our most-loved styles right now 💕</p>
+            </div>
+            <Link href="/products" style={{ background: "linear-gradient(135deg,#FF6B9D,#9B72F5)", color: "#fff", padding: "10px 24px", borderRadius: 50, fontWeight: 800, fontSize: 14, textDecoration: "none" }}>
+              View All →
+            </Link>
+          </div>
+
+          {loading ? (
+            <div style={{ textAlign: "center", padding: "60px 0" }}>
+              <div className="float" style={{ fontSize: 48 }}>🌸</div>
+              <p style={{ color: "#aaa", marginTop: 12, fontFamily: "'Fredoka One',cursive" }}>Loading cute outfits...</p>
+            </div>
+          ) : featured.length === 0 ? (
+            <div style={{
+              textAlign: "center", padding: "60px 0",
+              background: "linear-gradient(135deg,#FFF0F9,#F0F0FF)",
+              borderRadius: 24, border: "2px dashed #FFB5C8",
+            }}>
+              <div style={{ fontSize: 64, marginBottom: 16 }}>👗</div>
+              <div style={{ fontFamily: "'Fredoka One',cursive", fontSize: 26, color: "#FF6B9D", marginBottom: 8 }}>
+                Products Coming Soon!
+              </div>
+              <p style={{ color: "#aaa", marginBottom: 20 }}>Connect Firebase to start adding products.</p>
+              <Link href="/admin" style={{ background: "linear-gradient(135deg,#FF6B9D,#9B72F5)", color: "#fff", padding: "12px 28px", borderRadius: 50, fontWeight: 800, fontSize: 15, textDecoration: "none" }}>
+                🔐 Go to Admin Panel
+              </Link>
+            </div>
+          ) : (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(240px,1fr))", gap: 24 }}>
+              {featured.map(p => <ProductCard key={p.id} product={p} />)}
+            </div>
+          )}
+        </section>
+
+        {/* ====== WHY US ====== */}
+        <section style={{ background: "linear-gradient(135deg,#FFF0F9,#F0F0FF)", padding: "60px 24px" }}>
+          <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+            <h2 style={{ fontFamily: "'Fredoka One',cursive", fontSize: 34, textAlign: "center", marginBottom: 8 }}>
+              Why Moms ❤️ Us
+            </h2>
+            <p style={{ textAlign: "center", color: "#aaa", marginBottom: 40, fontSize: 15 }}>We know what little ones (and their parents) love!</p>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 24 }}>
+              {[
+                { emoji: "🌿", title: "Soft Fabrics", desc: "Gentle on baby skin, comfy all day long" },
+                { emoji: "💰", title: "Best Prices", desc: "Affordable fashion for every family" },
+                { emoji: "🌈", title: "Fun Designs", desc: "Colorful, playful & always trending" },
+                { emoji: "📦", title: "Fast Delivery", desc: "Quick delivery across Bengaluru" },
+                { emoji: "💬", title: "Easy Orders", desc: "Just WhatsApp us to order instantly" },
+                { emoji: "🔄", title: "Easy Returns", desc: "Hassle-free exchange policy" },
+              ].map(({ emoji, title, desc }) => (
+                <div key={title} style={{
+                  background: "#fff", borderRadius: 20, padding: "24px 20px",
+                  textAlign: "center", border: "2px solid #FFE0EE",
+                  transition: "transform 0.3s",
+                }}
+                  onMouseEnter={e => (e.currentTarget.style.transform = "translateY(-4px)")}
+                  onMouseLeave={e => (e.currentTarget.style.transform = "")}
+                >
+                  <div style={{ fontSize: 36, marginBottom: 12 }}>{emoji}</div>
+                  <div style={{ fontWeight: 800, fontSize: 16, color: "#2D2D2D", marginBottom: 6 }}>{title}</div>
+                  <div style={{ color: "#aaa", fontSize: 13, lineHeight: 1.6 }}>{desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ====== CONTACT CTA ====== */}
+        <section style={{ padding: "60px 24px", textAlign: "center" }}>
+          <div style={{ maxWidth: 600, margin: "0 auto" }}>
+            <div style={{ fontSize: 48, marginBottom: 16 }} className="wiggle">🏪</div>
+            <h2 style={{ fontFamily: "'Fredoka One',cursive", fontSize: 34, marginBottom: 12 }}>
+              Visit Our <span style={{ color: "#FF6B9D" }}>Store!</span>
+            </h2>
+            <p style={{ color: "#888", fontSize: 16, lineHeight: 1.7, marginBottom: 28 }}>
+              📍 #115, Kammanahalli RS Palya, Bengaluru – 560033<br />
+              📞 63613 60153 · Open daily 10AM – 8PM
+            </p>
+            <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+              <a href="tel:6361360153" style={{ background: "#FFB800", color: "#fff", padding: "14px 28px", borderRadius: 50, fontWeight: 800, fontSize: 15, textDecoration: "none" }}>
+                📞 Call Now
+              </a>
+              <a href="https://wa.me/916361360153" target="_blank" rel="noopener noreferrer" style={{ background: "#25d366", color: "#fff", padding: "14px 28px", borderRadius: 50, fontWeight: 800, fontSize: 15, textDecoration: "none" }}>
+                💬 WhatsApp Order
+              </a>
+              <a href="https://maps.google.com/?q=Kammanahalli+RS+Palya+Bangalore+560033" target="_blank" rel="noopener noreferrer" style={{ background: "linear-gradient(135deg,#FF6B9D,#9B72F5)", color: "#fff", padding: "14px 28px", borderRadius: 50, fontWeight: 800, fontSize: 15, textDecoration: "none" }}>
+                📍 Get Directions
+              </a>
+            </div>
+          </div>
+        </section>
+
+      </main>
+      <Footer />
+    </>
+  );
+}
